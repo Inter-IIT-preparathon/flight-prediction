@@ -1,12 +1,5 @@
-# Use Ubuntu 22.04 as the base image
-FROM ubuntu:22.04
-
-# Set environment variables for non-interactive installation
-ENV DEBIAN_FRONTEND=noninteractive
-
-# Update package lists and install necessary packages
-RUN apt-get update && \
-    apt-get install -y python3 python3-pip virtualenv
+# Use an official Python runtime as a parent image
+FROM python:3.9-slim
 
 # Set the working directory to /app
 WORKDIR /app
@@ -14,16 +7,20 @@ WORKDIR /app
 # Copy the current directory contents into the container at /app
 COPY . /app
 
-# Install virtualenv and create a virtual environment named ENV
-RUN pip3 install virtualenv && \
-    virtualenv ENV
+# Install virtual environment
+RUN pip install virtualenv
 
-# Activate the virtual environment and install project dependencies
-RUN /bin/bash -c "source ENV/bin/activate && pip install -r requirements.txt"
+# Create and activate virtual environment
+RUN virtualenv ENV
+RUN . /app/ENV/bin/activate
 
-# Make port 5000 available to the world outside this container
+# Install project dependencies
+RUN pip install -r requirements.txt
+
+# Expose the port the app runs on
 EXPOSE 5000
 
-# Run app.py when the container launches
-CMD ["/bin/bash", "-c", "python app.py"]
+# Run the app
+CMD ["python", "app.py"]
+
 
