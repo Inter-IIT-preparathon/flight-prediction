@@ -25,5 +25,5 @@ RUN /bin/bash -c "source ENV/bin/activate && pip install -r requirements.txt"
 EXPOSE 5000
 
 # Run app.py when the container launches
-CMD ["/bin/bash", "-c", "source ENV/bin/activate && python app.py"]
+CMD ["/bin/bash", "-c", "python app.py"]
 
